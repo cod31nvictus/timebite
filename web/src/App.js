@@ -8,14 +8,28 @@ function App() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    try {
-      const response = await api.register({ email, password });
-      setMessage('Registration successful!');
-      console.log(response);
-    } catch (error) {
-      setMessage(error.response?.data?.message || 'Registration failed');
-    }
-  };
+      // Basic validation
+      if (!email || !password) {
+        setMessage('Email and password are required');
+        return;
+      }
+      
+      if (password.length < 6) {
+        setMessage('Password must be at least 6 characters long');
+        return;
+      }
+  
+      try {
+        const response = await api.register({ email, password });
+        setMessage('Registration successful!');
+        console.log('Registration payload:', { email, password }); // Log what we're sending
+        console.log('Registration response:', response);
+      } catch (error) {
+        console.error('Full error object:', error);
+        console.error('Response data:', error.response?.data);
+        setMessage(error.response?.data?.message || 'Registration failed: ' + error.message);
+      }
+    };
 
   const handleLogin = async (e) => {
     e.preventDefault();

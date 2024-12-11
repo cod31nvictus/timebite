@@ -33,12 +33,15 @@ const RegisterForm = () => {
         try {
             // Remove confirmPassword before sending to API
             const { confirmPassword, ...registrationData } = formData;
+            console.log('Sending registration data:', registrationData);
             const response = await api.register(registrationData);
-            
+            console.log('Registration response:', response);
             // Log user in after successful registration
             login(response.user, response.token);
             navigate('/dashboard');
         } catch (err) {
+            console.error('Registration error:', err);
+            console.error('Error response:', err.response?.data);
             setError(err.response?.data?.error || 'Registration failed');
         }
     };
